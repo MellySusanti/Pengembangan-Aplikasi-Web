@@ -9,7 +9,7 @@ import {BrowserRouter as Router,
   withRouter
 } from 'react-router-dom'
 
-// withRouter
+//router dengan array
 
 class App extends Component{
   constructor(){
@@ -32,6 +32,21 @@ class App extends Component{
         history.push('/login')
       }}>Logout</button>
     ))
+
+    const routes = [{
+      path : '/',
+      exact : true,
+      render : ()=> <div>Ini Halaman Home</div>
+    },{
+      path : '/news',
+      render : ()=> <div>Ini Halaman News</div>
+    },{
+      path : '/login',
+      render : ()=> <LoginButton />
+    },{
+      path : '/profile',
+      render : ()=> this.state.isAuth ? <div>Ini halaman Profile <br /><LogoutButton /></div> : <Redirect to ='/login' />
+    }]
     return(
       <Router>
         <div>
@@ -41,10 +56,11 @@ class App extends Component{
              <li><Link to='/profile'>Profile</Link></li>
            </ul>
            <Switch>
-           <Route path='/' exact render={() => <div> Ini halaman home</div>} />
-           <Route path='/news' render={() => <div>Ini halaman News</div>}/>         
-           <Route path='/login' render={() => <LoginButton /> }/>
-           <Route path='/profile' render={() => this.state.isAuth ? <div>Ini halaman Profile <br/><LogoutButton/> </div> : <Redirect to='/login' />}/>
+           {
+             routes.map((item, index) => (
+               <Route path={item.path} exact={item.exact} render={item.render} />
+             ))
+           }
            </Switch>
         </div>
       </Router>
